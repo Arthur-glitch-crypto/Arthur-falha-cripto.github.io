@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* (Estilos do seu cÃÂÃÂ³digo CSS) */
+        #points-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #user-code-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #user-chat {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        #user-chat input {
+            width: 70%;
+            padding: 8px;
+            margin-right: 5px;
+        }
+
+        #user-chat button {
+            padding: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <p>NÃÂ£o feche ou saia dessa guia. O seu cÃÂ³digo nÃÂ£o serÃÂ¡ o mesmo se vocÃÂª sair e entrar novamente.</p>
+
+    <div id="unlock">
+        <label for="password">Digite a senha para desbloquear:</label>
+        <input type="password" id="password" />
+        <button onclick="unlockLinks()">Desbloquear Links</button>
+    </div>
+
+    <div id="payment-message">
+        Envie R$20,00 informando sua chave pix e faremos um PIX de R$00,01 informando sua senha! Ops: se nÃÂÃÂ£o for enviado exatamente R$20,00 ou nÃ£o informar sua chave pix, vocÃÂÃÂª nÃÂÃÂ£o receberÃÂÃÂ¡ a senha.
+    </div>
+
+    <ul class="circle-menu">
+        <li>
+            <a href="https://nubank.com.br/cobrar/tezyu/65a41ae1-659d-4dab-84f3-8dd2bed26604">
+                PIX
+            </a>
+        </li>
+        <li>
+            <a href="https://steinshop.com.br/">
+                Loja
+            </a>
+        </li>
+        <li>
+            <a href="https://youtube.com/@void33.?feature=shared">
+                Canal
+            </a>
+        </li>
+        <li class="locked" id="link4"><a href="#" onclick="indicate()">BÃÂÃÂ´nus por IndicaÃÂÃÂ§ÃÂÃÂ£o</a></li>
+        <li class="locked">Link 5</li>
+    </ul>
+
+    <div id="user-code-section">
+        <h3>CÃÂÃÂ³digo Exclusivo do UsuÃÂÃÂ¡rio:</h3>
+        <p id="user-code">Ainda nÃÂÃÂ£o obtido</p>
+    </div>
+
+    <div id="points-section">
+        <h3>PontuaÃÂÃÂ§ÃÂÃÂ£o do UsuÃÂÃÂ¡rio:</h3>
+        <p id="user-points">0 ponto(s)</p>
+    </div>
+
+    <div id="user-reserve-code-section">
+        <h3>Segundo CÃÂÃÂ³digo Exclusivo do UsuÃÂÃÂ¡rio:</h3>
+        <p id="user-reserve-code">Ainda nÃÂÃÂ£o obtido</p>
+    </div>
+
+    <div id="user-chat">
+        <h3>Seu CÃÂÃÂ³digo Exclusivo:</h3>
+        <p id="unlocked-user-code">Ainda nÃÂÃÂ£o obtido</p>
+        <input type="text" id="pix-key" placeholder="Informe sua chave PIX">
+        <button onclick="sendPixKey()">Enviar</button>
+    </div>
+
+    <script>
+        var isUnlocked = false;
+        var userPoints = 0; // Pontos do usuÃÂÃÂ¡rio atual
+        var userCode = generateRandomCode(15); // CÃÂÃÂ³digo exclusivo do usuÃÂÃÂ¡rio
+        var userReserveCode = generateRandomCode(15); // Segundo cÃÂÃÂ³digo exclusivo do usuÃÂÃÂ¡rio
+        var userEmail = null; // E-mail do usuÃÂÃÂ¡rio
+        var userDefinedPassword = null; // Senha definida pelo usuÃÂÃÂ¡rio
+
+        // Mapeamento de cÃÂÃÂ³digos exclusivos para pontos
+        var friendCodes = {
+            "codigo_amigo_1": 1,
+            "codigo_amigo_2": 1,
+            // Adicione mais cÃÂÃÂ³digos e associaÃÂÃÂ§ÃÂÃÂµes conforme necessÃÂÃÂ¡rio
+        };
+
+        // Inicia o intervalo para gerar senhas dinÃÂÃÂ¢micas a cada segundo
+        var dynamicPasswordInterval = setInterval(generateDynamicPassword, 1000);
+
+        function unlockLinks() {
+            var enteredPassword = document.getElementById("password").value;
+            
+            // Verifica se a senha ÃÂÃÂ© vÃÂÃÂ¡lida
+            if (enteredPassword === userDefinedPassword) {
+                var lockedLinks = document.querySelectorAll('.circle-menu li:nth-child(n+4)');
+                lockedLinks.forEach(link => {
+                    link.style.display = 'block';
+                });
+
+                document.getElementById("unlock").style.display = 'none';
+                isUnlocked = true;
+
+                // Exibe o cÃ³digo exclusivo apÃ³s desbloquear os links
+                document.getElementById("unlocked-user-code").textContent = userCode;
+            } else {
+                alert("Senha incorreta. Tente novamente.");
+            }
+        }
+
+        function indicate() {
+            if (isUnlocked) {
+                var friendCode = prompt("Digite o cÃÂÃÂ³digo de indicaÃÂÃÂ§ÃÂÃÂ£o do seu amigo:");
+                
+                // LÃÂÃÂ³gica de verificaÃÂÃÂ§ÃÂÃÂ£o do cÃÂÃÂ³digo e aÃÂÃÂ§ÃÂÃÂ£o associada
+                if (friendCodes.hasOwnProperty(friendCode)) {
+                    userPoints += friendCodes[friendCode];
+                    alert("IndicaÃÂÃÂ§ÃÂÃÂ£o bem-sucedida! Seu amigo recebeu 1 ponto.");
+                    alert("VocÃÂÃÂª agora tem " + userPoints + " ponto(s).");
+                    updatePoints();
+                } else {
+                    alert("CÃÂÃÂ³digo de indicaÃÂÃÂ§Ã
