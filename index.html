@@ -199,7 +199,7 @@
 
             fileInput.addEventListener('change', (event) => {
                 const file = event.target.files[0];
-                if (file && (userId === '6952' || userId === '7244')) {
+                if (file) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         const message = {
@@ -212,8 +212,6 @@
                         saveMessage(message);
                     }
                     reader.readAsDataURL(file);
-                } else {
-                    alert('Você não tem permissão para enviar fotos.');
                 }
             });
 
@@ -246,7 +244,7 @@
                     `;
                 }
 
-                if (userId === '7244' || userId === '6952') {
+                if (userId === '2831' || userId === '471') {
                     const pinMessageButton = document.createElement('button');
                     pinMessageButton.textContent = 'Fixar';
                     pinMessageButton.addEventListener('click', () => {
@@ -287,9 +285,10 @@
                     pinnedMessageElement.classList.add('pinned-message');
                     if (message.image) {
                         pinnedMessageElement.innerHTML = `
-                            <strong>${message.timestamp} (Usuário ${message.userId}):</strong><br>
+                            <strong>${message.timestamp} (Usuário<strong>${message.timestamp} (Usuário ${message.userId}):</strong><br>
                             <img src="${message.image}" style="max-width: 100%; border-radius: 5px;">
-                        `;} else {
+                        `;
+                    } else {
                         pinnedMessageElement.innerHTML = `
                             <strong>${message.timestamp} (Usuário ${message.userId}):</strong> ${message.text}
                         `;
@@ -297,25 +296,33 @@
                     pinnedContainer.appendChild(pinnedMessageElement);
                 });
 
-                chatMessages.appendChild(pinnedContainer);
+                // Remove previous pinned messages container if it exists
+                const existingPinnedContainer = document.querySelector('.pinned-messages');
+                if (existingPinnedContainer) {
+                    existingPinnedContainer.remove();
+                }
+
+                // Add the new pinned messages container to the chat
+                chatMessages.insertBefore(pinnedContainer, chatMessages.firstChild);
             }
 
-            // Mostrar mensagens fixadas ao carregar a página, se houver
-            const savedMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
-            const pinnedMessages = savedMessages.filter(message => message.pinned);
+            // Load saved messages from localStorage and display them
+            function loadMessages() {
+                const savedMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+                savedMessages.forEach(message => addMessageToChat(message));
 
-            if (pinnedMessages.length > 0) {
-                showPinnedMessages(); // Mostrar mensagens fixadas se houver alguma ao carregar
+                // Show pinned messages if there are any
+                const hasPinnedMessages = savedMessages.some(message => message.pinned);
+                if (hasPinnedMessages) {
+                    showPinnedMessages();
+                    pinButton.style.display = 'block';
+                    pinButton.addEventListener('click', showPinnedMessages);
+                }
             }
 
-            // Mostrar botão para mensagens fixadas se houver alguma
-            const hasPinnedMessages = savedMessages.some(message => message.pinned);
-            if (hasPinnedMessages) {
-                pinButton.style.display = 'block';
-                pinButton.addEventListener('click', showPinnedMessages);
-            }
+            // Load messages when the page loads
+            loadMessages();
         });
-
     </script>
 </body>
     </html>
