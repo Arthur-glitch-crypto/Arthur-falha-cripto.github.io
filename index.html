@@ -244,18 +244,16 @@
                     `;
                 }
 
-                if (userId === '2831' || userId === '471') {
-                    const pinMessageButton = document.createElement('button');
-                    pinMessageButton.textContent = 'Fixar';
-                    pinMessageButton.addEventListener('click', () => {
-                        message.pinned = true;
-                        pinButton.style.display = 'block';
-                        pinButton.addEventListener('click', showPinnedMessages);
-                        pinButton.textContent = 'Mensagens Fixadas';
-                        saveMessage(message);
-                    });
-                    messageElement.appendChild(pinMessageButton);
-                }
+                const pinMessageButton = document.createElement('button');
+                pinMessageButton.textContent = 'Fixar';
+                pinMessageButton.addEventListener('click', () => {
+                    message.pinned = true;
+                    pinButton.style.display = 'block';
+                    pinButton.addEventListener('click', showPinnedMessages);
+                    pinButton.textContent = 'Mensagens Fixadas';
+                    saveMessage(message);
+                });
+                messageElement.appendChild(pinMessageButton);
 
                 chatMessages.appendChild(messageElement);
                 chatMessages.scrollTop = chatMessages.scrollHeight; // Manter as mensagens mais recentes visíveis
@@ -285,8 +283,7 @@
                     pinnedMessageElement.classList.add('pinned-message');
                     if (message.image) {
                         pinnedMessageElement.innerHTML = `
-                            <strong>${message.timestamp} (Usuário<strong>${message.timestamp} (Usuário ${message.userId}):</strong><br>
-                            <img src="${message.image}" style="max-width: 100%; border-radius: 5px;">
+                            <strong>${message.timestamp} (Usuário ${message.userId}):</strong<img src="${message.image}" style="max-width: 100%; border-radius: 5px;">
                         `;
                     } else {
                         pinnedMessageElement.innerHTML = `
@@ -325,4 +322,4 @@
         });
     </script>
 </body>
-    </html>
+</html>
