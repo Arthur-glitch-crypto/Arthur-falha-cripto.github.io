@@ -1,146 +1,321 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat E.E.B Leonor de Barros</title>
     <style>
-        /* (Estilos do seu cÃÂÃÂ³digo CSS) */
-        #points-section {
-            text-align: center;
-            margin-top: 20px;
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000000;
+            flex-direction: column;
         }
 
-        #user-code-section {
-            text-align: center;
-            margin-top: 20px;
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #000000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
-        #user-chat {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background-color: #fff;
-            border: 1px solid #ccc;
+        .chat-header {
+            background-color: #000000;
+            color: white;
             padding: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .chat-message {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #8FBC8F;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .chat-message img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+
+        .chat-message button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            padding: 5px;
+            background-color: #4CAF50;
+            color: red;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        #message-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        #file-input {
+            margin-right: 10px;
+        }
+
+        #send-button {
+            padding: 10px;
+            background-color: #000000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #send-button:hover {
+            background-color: #0000CD;
+        }
+
+        .header-text {
+            text-align: center;
+            padding: 10px;
+            background-color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .header-text h2, .header-text p {
+            margin: 0;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #000000;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #pin-button {
+            position: fixed;
+            bottom: 580px;
+            right: 120px;
+            padding: 10px;
+            background-color: #0000CD;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
             display: none;
         }
 
-        #user-chat input {
-            width: 70%;
-            padding: 8px;
-            margin-right: 5px;
+        #pin-button:hover {
+            background-color: #000000;
         }
 
-        #user-chat button {
-            padding: 8px;
-            cursor: pointer;
+        .pinned-messages {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 10px auto;
+        }
+
+        .pinned-message {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-
-    <p>NÃÂ£o feche ou saia dessa guia. O seu cÃÂ³digo nÃÂ£o serÃÂ¡ o mesmo se vocÃÂª sair e entrar novamente.</p>
-
-    <div id="unlock">
-        <label for="password">Digite a senha para desbloquear:</label>
-        <input type="password" id="password" />
-        <button onclick="unlockLinks()">Desbloquear Links</button>
+    <div class="header-text">
+        
+    </div>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h3>Chat E.E.B Leonor de Barros</h3>
+            <div id="user-id">Usuário: 0</div>
+        </div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="footer">
+            <input type="text" id="message-input" placeholder="Digite sua mensagem...">
+            <input type="file" id="file-input" accept="image/*">
+            <button id="send-button">Enviar</button>
+        </div>
     </div>
 
-    <div id="payment-message">
-        Envie R$20,00 informando sua chave pix e faremos um PIX de R$00,01 informando sua senha! Ops: se nÃÂÃÂ£o for enviado exatamente R$20,00 ou nÃ£o informar sua chave pix, vocÃÂÃÂª nÃÂÃÂ£o receberÃÂÃÂ¡ a senha.
-    </div>
-
-    <ul class="circle-menu">
-        <li>
-            <a href="https://nubank.com.br/cobrar/tezyu/65a41ae1-659d-4dab-84f3-8dd2bed26604">
-                PIX
-            </a>
-        </li>
-        <li>
-            <a href="https://steinshop.com.br/">
-                Loja
-            </a>
-        </li>
-        <li>
-            <a href="https://youtube.com/@void33.?feature=shared">
-                Canal
-            </a>
-        </li>
-        <li class="locked" id="link4"><a href="#" onclick="indicate()">BÃÂÃÂ´nus por IndicaÃÂÃÂ§ÃÂÃÂ£o</a></li>
-        <li class="locked">Link 5</li>
-    </ul>
-
-    <div id="user-code-section">
-        <h3>CÃÂÃÂ³digo Exclusivo do UsuÃÂÃÂ¡rio:</h3>
-        <p id="user-code">Ainda nÃÂÃÂ£o obtido</p>
-    </div>
-
-    <div id="points-section">
-        <h3>PontuaÃÂÃÂ§ÃÂÃÂ£o do UsuÃÂÃÂ¡rio:</h3>
-        <p id="user-points">0 ponto(s)</p>
-    </div>
-
-    <div id="user-reserve-code-section">
-        <h3>Segundo CÃÂÃÂ³digo Exclusivo do UsuÃÂÃÂ¡rio:</h3>
-        <p id="user-reserve-code">Ainda nÃÂÃÂ£o obtido</p>
-    </div>
-
-    <div id="user-chat">
-        <h3>Seu CÃÂÃÂ³digo Exclusivo:</h3>
-        <p id="unlocked-user-code">Ainda nÃÂÃÂ£o obtido</p>
-        <input type="text" id="pix-key" placeholder="Informe sua chave PIX">
-        <button onclick="sendPixKey()">Enviar</button>
-    </div>
+    <button id="pin-button">Mensagens Fixadas</button>
 
     <script>
-        var isUnlocked = false;
-        var userPoints = 0; // Pontos do usuÃÂÃÂ¡rio atual
-        var userCode = generateRandomCode(15); // CÃÂÃÂ³digo exclusivo do usuÃÂÃÂ¡rio
-        var userReserveCode = generateRandomCode(15); // Segundo cÃÂÃÂ³digo exclusivo do usuÃÂÃÂ¡rio
-        var userEmail = null; // E-mail do usuÃÂÃÂ¡rio
-        var userDefinedPassword = null; // Senha definida pelo usuÃÂÃÂ¡rio
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageInput = document.getElementById('message-input');
+            const fileInput = document.getElementById('file-input');
+            const sendButton = document.getElementById('send-button');
+            const userIdElement = document.getElementById('user-id');
+            const pinButton = document.getElementById('pin-button');
 
-        // Mapeamento de cÃÂÃÂ³digos exclusivos para pontos
-        var friendCodes = {
-            "codigo_amigo_1": 1,
-            "codigo_amigo_2": 1,
-            // Adicione mais cÃÂÃÂ³digos e associaÃÂÃÂ§ÃÂÃÂµes conforme necessÃÂÃÂ¡rio
-        };
+            let userId = localStorage.getItem('userId');
+            if (!userId) {
+                userId = Math.floor(Math.random() * 10001); // Gerar um ID aleatório
+                localStorage.setItem('userId', userId);
+            }
+            userIdElement.textContent = `Usuário: ${userId}`;
 
-        // Inicia o intervalo para gerar senhas dinÃÂÃÂ¢micas a cada segundo
-        var dynamicPasswordInterval = setInterval(generateDynamicPassword, 1000);
+            sendButton.addEventListener('click', (event) => {
+                event.preventDefault(); // Evita o comportamento padrão de um botão de envio dentro de um formulário
+                sendMessage();
+            });
 
-        function unlockLinks() {
-            var enteredPassword = document.getElementById("password").value;
-            
-            // Verifica se a senha ÃÂÃÂ© vÃÂÃÂ¡lida
-            if (enteredPassword === userDefinedPassword) {
-                var lockedLinks = document.querySelectorAll('.circle-menu li:nth-child(n+4)');
-                lockedLinks.forEach(link => {
-                    link.style.display = 'block';
+            fileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file && (userId === '6952' || userId === '7244')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const message = {
+                            userId: userId,
+                            image: e.target.result,
+                            timestamp: new Date().toLocaleTimeString(),
+                            pinned: false  // Nova propriedade para indicar mensagem fixada
+                        };
+                        addMessageToChat(message);
+                        saveMessage(message);
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    alert('Você não tem permissão para enviar fotos.');
+                }
+            });
+
+            function sendMessage() {
+                const messageText = messageInput.value.trim();
+                if (messageText !== '') {
+                    const message = {
+                        userId: userId,
+                        text: messageText,
+                        timestamp: new Date().toLocaleTimeString(),
+                        pinned: false  // Nova propriedade para indicar mensagem fixada
+                    };
+                    addMessageToChat(message);
+                    saveMessage(message);
+                    messageInput.value = '';
+                }
+            }
+
+            function addMessageToChat(message) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat-message');
+                if (message.image) {
+                    messageElement.innerHTML = `
+                        <strong>${message.timestamp} (Usuário ${message.userId}):</strong><br>
+                        <img src="${message.image}" style="max-width: 100%; border-radius: 5px;">
+                    `;
+                } else {
+                    messageElement.innerHTML = `
+                        <strong>${message.timestamp} (Usuário ${message.userId}):</strong> ${message.text}
+                    `;
+                }
+
+                if (userId === '7244' || userId === '6952') {
+                    const pinMessageButton = document.createElement('button');
+                    pinMessageButton.textContent = 'Fixar';
+                    pinMessageButton.addEventListener('click', () => {
+                        message.pinned = true;
+                        pinButton.style.display = 'block';
+                        pinButton.addEventListener('click', showPinnedMessages);
+                        pinButton.textContent = 'Mensagens Fixadas';
+                        saveMessage(message);
+                    });
+                    messageElement.appendChild(pinMessageButton);
+                }
+
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight; // Manter as mensagens mais recentes visíveis
+            }
+
+            function saveMessage(message) {
+                let savedMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+                savedMessages.push(message);
+                localStorage.setItem('chatMessages', JSON.stringify(savedMessages));
+
+                // Mostrar botão de mensagens fixadas se houver alguma mensagem fixada
+                const hasPinnedMessages = savedMessages.some(m => m.pinned);
+                if (hasPinnedMessages) {
+                    pinButton.style.display = 'block';
+                    pinButton.addEventListener('click', showPinnedMessages);
+                }
+            }
+
+            function showPinnedMessages() {
+                const savedMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+                const pinnedMessages = savedMessages.filter(message => message.pinned);
+
+                const pinnedContainer = document.createElement('div');
+                pinnedContainer.classList.add('pinned-messages');
+                pinnedMessages.forEach(message => {
+                    const pinnedMessageElement = document.createElement('div');
+                    pinnedMessageElement.classList.add('pinned-message');
+                    if (message.image) {
+                        pinnedMessageElement.innerHTML = `
+                            <strong>${message.timestamp} (Usuário ${message.userId}):</strong><br>
+                            <img src="${message.image}" style="max-width: 100%; border-radius: 5px;">
+                        `;} else {
+                        pinnedMessageElement.innerHTML = `
+                            <strong>${message.timestamp} (Usuário ${message.userId}):</strong> ${message.text}
+                        `;
+                    }
+                    pinnedContainer.appendChild(pinnedMessageElement);
                 });
 
-                document.getElementById("unlock").style.display = 'none';
-                isUnlocked = true;
-
-                // Exibe o cÃ³digo exclusivo apÃ³s desbloquear os links
-                document.getElementById("unlocked-user-code").textContent = userCode;
-            } else {
-                alert("Senha incorreta. Tente novamente.");
+                chatMessages.appendChild(pinnedContainer);
             }
-        }
 
-        function indicate() {
-            if (isUnlocked) {
-                var friendCode = prompt("Digite o cÃÂÃÂ³digo de indicaÃÂÃÂ§ÃÂÃÂ£o do seu amigo:");
-                
-                // LÃÂÃÂ³gica de verificaÃÂÃÂ§ÃÂÃÂ£o do cÃÂÃÂ³digo e aÃÂÃÂ§ÃÂÃÂ£o associada
-                if (friendCodes.hasOwnProperty(friendCode)) {
-                    userPoints += friendCodes[friendCode];
-                    alert("IndicaÃÂÃÂ§ÃÂÃÂ£o bem-sucedida! Seu amigo recebeu 1 ponto.");
-                    alert("VocÃÂÃÂª agora tem " + userPoints + " ponto(s).");
-                    updatePoints();
-                } else {
-                    alert("CÃÂÃÂ³digo de indicaÃÂÃÂ§Ã
+            // Mostrar mensagens fixadas ao carregar a página, se houver
+            const savedMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+            const pinnedMessages = savedMessages.filter(message => message.pinned);
+
+            if (pinnedMessages.length > 0) {
+                showPinnedMessages(); // Mostrar mensagens fixadas se houver alguma ao carregar
+            }
+
+            // Mostrar botão para mensagens fixadas se houver alguma
+            const hasPinnedMessages = savedMessages.some(message => message.pinned);
+            if (hasPinnedMessages) {
+                pinButton.style.display = 'block';
+                pinButton.addEventListener('click', showPinnedMessages);
+            }
+        });
+
+    </script>
+</body>
+    </html>
